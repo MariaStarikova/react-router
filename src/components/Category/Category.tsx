@@ -1,5 +1,7 @@
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import './Category.scss';
+import { useCategoryList } from '@/hooks';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export interface Character {
   id: number;
@@ -28,18 +30,17 @@ export interface Location {
   created: string;
 }
 
-interface CategoryProps {
-  data: Character[] | Episode[] | Location[];
-}
-
-export function Category(props: CategoryProps) {
-  const { data } = props;
+export function Category() {
   const { category } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
+  const [pageNumber, setPageNumber] = useState(1);
+  const [url, setUrl] = useState('');
+
+  const { loading, error, items, hasMore } = useCategoryList({ pageNumber, url });
 
   const sort = searchParams.get('sort');
 
-  const sortedData = [...data].sort((a, b) => {
+  const sortedData = [...items].sort((a, b) => {
     const dateA = new Date(a.created).getTime();
     const dateB = new Date(b.created).getTime();
 
@@ -58,7 +59,43 @@ export function Category(props: CategoryProps) {
     locations: 'Список локаций'
   };
 
+  const urlMap: Record<string, string> = {
+    characters: 'https://rickandmortyapi.com/api/character',
+    locations: 'https://rickandmortyapi.com/api/location',
+    episodes: 'https://rickandmortyapi.com/api/episode'
+  };
+
   const title = titleMap[category ?? ''] || '';
+
+  const observer = useRef<IntersectionObserver | null>(null);
+  const lastNodeRef = useCallback(
+    (node: HTMLLIElement | null) => {
+      if (loading) return;
+      if (observer.current) {
+        observer.current.disconnect();
+      }
+
+      observer.current = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPageNumber(prevState => prevState + 1);
+        }
+      });
+      if (node) {
+        observer.current.observe(node);
+      }
+    },
+    [loading, hasMore]
+  );
+
+  useEffect(() => {
+    console.log('category:', category);
+    console.log('urlMap[category]', category && urlMap[category]);
+    if (category && urlMap[category]) {
+      setUrl(urlMap[category]);
+      setPageNumber(1);
+    }
+  }, [category]);
+
   return (
     <div className="category">
       <h1 className="category__title">{title}</h1>
@@ -67,13 +104,27 @@ export function Category(props: CategoryProps) {
         <button onClick={() => setSearchParams({ sort: 'createdDESC' })}>Сначала новые</button>
       </div>
       <ul className="category__list">
-        {sortedData.map(val => (
-          <li className="category__item" key={val.id}>
-            <Link className="category__link" to={`/${category}/${val.id}`}>
-              <p className="category__name">{val.name}</p>
-            </Link>
-          </li>
-        ))}
+        {sortedData.map((val, index) => {
+          if (sortedData.length === index + 1) {
+            return (
+              <li className="category__item" key={val.id} ref={lastNodeRef}>
+                <Link className="category__link" to={`/${category}/${val.id}`}>
+                  <p className="category__name">{val.name}</p>
+                </Link>
+              </li>
+            );
+          } else {
+            return (
+              <li className="category__item" key={val.id}>
+                <Link className="category__link" to={`/${category}/${val.id}`}>
+                  <p className="category__name">{val.name}</p>
+                </Link>
+              </li>
+            );
+          }
+        })}
+        {loading && <h4>Загрузка...</h4>}
+        {error && <h4>Ошибка</h4>}
       </ul>
     </div>
   );
