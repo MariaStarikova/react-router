@@ -88,8 +88,6 @@ export function Category() {
   );
 
   useEffect(() => {
-    console.log('category:', category);
-    console.log('urlMap[category]', category && urlMap[category]);
     if (category && urlMap[category]) {
       setUrl(urlMap[category]);
       setPageNumber(1);
