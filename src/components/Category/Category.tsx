@@ -1,7 +1,7 @@
-import { Link, useParams, useSearchParams } from 'react-router-dom';
-import './Category.scss';
-import { useCategoryList } from '@/hooks';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
+import { useCategoryList } from '@/hooks';
+import './Category.scss';
 
 export interface Character {
   id: number;
@@ -106,7 +106,11 @@ export function Category() {
           if (sortedData.length === index + 1) {
             return (
               <li className="category__item" key={val.id} ref={lastNodeRef}>
-                <Link className="category__link" to={`/${category}/${val.id}`}>
+                <Link
+                  className="category__link"
+                  to={`/${category}/${val.id}`}
+                  state={{ item: val }}
+                >
                   <p className="category__name">{val.name}</p>
                 </Link>
               </li>
@@ -114,7 +118,11 @@ export function Category() {
           } else {
             return (
               <li className="category__item" key={val.id}>
-                <Link className="category__link" to={`/${category}/${val.id}`}>
+                <Link
+                  className="category__link"
+                  to={`/${category}/${val.id}`}
+                  state={{ item: val }}
+                >
                   <p className="category__name">{val.name}</p>
                 </Link>
               </li>

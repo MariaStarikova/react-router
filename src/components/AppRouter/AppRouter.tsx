@@ -1,7 +1,7 @@
-import { Route, Routes } from 'react-router-dom';
-import { paths } from '../../routes/routes';
-import { PrivateRoute } from '@/components/PrivateRoute';
 import { lazy, Suspense } from 'react';
+import { Route, Routes } from 'react-router-dom';
+import { paths } from '@/routes/routes';
+import { PrivateRoute } from '@/components/PrivateRoute';
 
 const HomePage = lazy(() =>
   import('@/pages/HomePage').then(module => ({
