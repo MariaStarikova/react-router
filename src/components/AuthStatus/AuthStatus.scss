@@ -1,0 +1,11 @@
+.auth-status {
+  @extend %flex-rows;
+  margin-bottom: 10px;
+}
+
+.auth-status__text {
+  margin: 0;
+}
+
+.auth-status__button {
+}

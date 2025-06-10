@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthProvider';
+import './AuthStatus.scss';
 
 export function AuthStatus() {
   const auth = useAuth();
@@ -11,7 +12,7 @@ export function AuthStatus() {
   }, [auth]);
 
   if (auth?.user === null) {
-    return <p>Вы не вошли в систему.</p>;
+    return <p className="auth-status__text">Вы не вошли в систему.</p>;
   }
 
   if (auth !== null) {
@@ -22,10 +23,12 @@ export function AuthStatus() {
     };
 
     return (
-      <>
-        <p>Добро пожаловать, {auth.user?.email}</p>
-        <button onClick={handleSignout}>Выйти</button>
-      </>
+      <div className="auth-status">
+        <p className="auth-status__text">Добро пожаловать, {auth.user?.email}</p>
+        <button className="auth-status__button" onClick={handleSignout}>
+          Выйти
+        </button>
+      </div>
     );
   }
 
