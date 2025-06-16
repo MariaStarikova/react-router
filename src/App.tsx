@@ -1,8 +1,8 @@
 import { BrowserRouter } from 'react-router-dom';
-import { Navbar } from '@/components/Navbar';
+import { Navbar } from '@/components';
+import { ErrorBoundary } from '@/components';
+import { AppRouter } from '@/components';
 import { AuthProvider } from '@/context/AuthProvider';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
-import { AppRouter } from '@/components/AppRouter';
 import './App.scss';
 
 function App() {
