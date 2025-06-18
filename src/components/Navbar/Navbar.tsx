@@ -34,7 +34,7 @@ export function Navbar() {
       <BottomNavigation
         value={value}
         showLabels
-        onChange={(event, newValue) => {
+        onChange={(_event, newValue) => {
           setValue(newValue);
         }}
         className="navbar__list"
