@@ -1,12 +1,13 @@
-# Задание по архитектуре
+# PWA
 
-### Реализовала модульный подход
+### Реализовала PWA
 
-Руководство: https://blog.openreplay.com/react-architecture-patterns-for-your-projects/
+Использовала vite-plugin-pwa: https://vite-pwa-org.netlify.app/frameworks/react.html
 
-В папке `components` сделала общий `index.ts` для импорта всех компонентов и последующего экспорта.
-Добавила абсолютный импорт туда, где его не было.
+Создала сервис-воркер public/sw.js.
 
-### Использовала дизайн-систему Material UI
+Попробовала установить на компьютер, работает.
 
-Реализовала компонент с навигацией `Navbar` с помощью инструментов Material UI.
+В режиме оффлайн отображается не страница offline, а ErrorBoundary.
+
+Деплой: https://rick-morti.web.app/

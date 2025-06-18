@@ -28,6 +28,11 @@ const Signin = lazy(() =>
     default: module.Signin
   }))
 );
+const OfflinePage = lazy(() =>
+  import('@/pages/OfflinePage').then(module => ({
+    default: module.OfflinePage
+  }))
+);
 
 export function AppRouter() {
   return (
@@ -66,6 +71,14 @@ export function AppRouter() {
               <DetailsPage />
             </Suspense>
           </PrivateRoute>
+        }
+      />
+      <Route
+        path="/offline"
+        element={
+          <Suspense fallback={<p>Загрузка...</p>}>
+            <OfflinePage />
+          </Suspense>
         }
       />
       <Route
